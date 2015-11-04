@@ -1,6 +1,6 @@
 from flask import Blueprint, send_file, redirect, request, Response
 from flask import current_app as app
-from app.image.downlaod import Download
+from app.image.download import Download
 import os
 from  hashlib import md5
 import urllib
@@ -46,26 +46,31 @@ def scan_args( args ):
   command = {}
   if args[:4] == 'http':
     command['download_url'] = args
-  print args
+    args = args.replace( command['download_url'], '' )
+  image_adj = {}
+  c = 0
+  if len( args ) > 0:
+    for arg in args.split('/'):
+      if arg == 'crop':
+        crop_arg =args[c+1]
+        image_adj['crop'] = []
+        if ',' in crop_arg:
+          tmp = crop_arg.split(',')
+          image_adj['crop'].append( int(tmp[0]) )
+          image_adj['crop'].append( int(tmp[1]) )
+        else:
+          image_adj['crop'].append( int(crop_arg) )
+          image_adj['crop'].append( int(crop_arg) )
+      if arg == 'maxwidth':
+        image_adj['maxwidth'] = int(args[c+1])
+      c += 1
+      if arg[0] == 'v' and arg[1:].isdigit():
+        command['version'] = arg[1:]
+    command['image_adj'] = image_adj
   return command
 
 def image_cache_key( file_path, adjustments ):
   return md5( file_path + str( adjustments ) ).hexdigest()
-
-def download_image( args ):
-  download_path = os.path.join( mount, 'downloads')
-  remote_url = args['download_url']
-  the_hash   = md5( remote_url ).hexdigest()
-  img_path   = os.path.join( download_path, the_hash )
-  if os.path.exists( img_path ):
-    return img_path
-  print 'downloading!'
-  if not os.path.exists( download_path ):
-    os.makedirs( download_path )
-  remote_image    = urllib.urlopen( remote_url ).read()
-  f = open( img_path,'wb')
-  f.write( remote_image )
-  f.close()
 
 def __find_img_args( args ):
     image_adj = {}
