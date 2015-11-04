@@ -9,7 +9,6 @@ PRODUCTION = False
 
 # Define the application directory
 BASE_DIR           = os.path.abspath(os.path.dirname(__file__))  
-print BASE_DIR
 MOUNT_DIR          = os.path.join( BASE_DIR, '..', 'mount' )
 CACHE_DIR          = os.path.join( MOUNT_DIR, 'cache' )
 ALLOWED_EXTENSIONS = set( ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'] )
