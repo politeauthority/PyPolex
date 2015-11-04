@@ -10,7 +10,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 app = Flask(__name__)
 
 # Configurations
-app.config.from_object('config')
+app.config.from_object('app.config')
 
 # Set Up Logging
 app_log_file = os.path.join( 'app.log' )

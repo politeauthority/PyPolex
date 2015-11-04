@@ -1,6 +1,6 @@
 import os
 
-APP_URL = 'http://192.168.7.72'
+APP_URL = 'http://192.168.7.78'
 
 # Statements for enabling the development environment
 DEBUG = True
@@ -9,8 +9,9 @@ PRODUCTION = False
 
 # Define the application directory
 BASE_DIR           = os.path.abspath(os.path.dirname(__file__))  
-UPLOAD_DIR         = BASE_DIR + '/uploads/'
-CACHE_DIR          = BASE_DIR + '/cache/'
+print BASE_DIR
+MOUNT_DIR          = os.path.join( BASE_DIR, '..', 'mount' )
+CACHE_DIR          = os.path.join( MOUNT_DIR, 'cache' )
 ALLOWED_EXTENSIONS = set( ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'] )
 LOG_DIR            = BASE_DIR + '/logs/'
 WEB_IP             = '0.0.0.0'
@@ -31,10 +32,3 @@ CSRF_SESSION_KEY = "secret"
 
 # Secret key for signing cookies
 SECRET_KEY = "secret"
-
-
-
-
-# DEFAULT ADMIN LOGIN
-ADMIN_EMAIL    = 'admin@politeauthority.com'
-ADMIN_PASSWORD = 'cleancut'
