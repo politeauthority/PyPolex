@@ -1,10 +1,14 @@
 from flask import Blueprint, send_file, redirect, request, Response
 from flask import current_app as app
+from app.image.downlaod import Download
 import os
 from  hashlib import md5
+import urllib
 from PIL import Image
 
 mod_remote = Blueprint('Remote', __name__, url_prefix='/r')
+mount = '/home/alix/Dropbox/Development/PyPolex/mount/'
+
 
 @mod_remote.route('/<path:varargs>')
 def index( varargs = None ):
@@ -12,9 +16,9 @@ def index( varargs = None ):
   # args = varargs.split('/')
 
   if 'download_url' in args:
-    download_images( args )
+    Download( args ).go()
 
-  return args['download_url']
+  return str(args['download_url'])
 
   return str(args)
   if args[0].isdigit() and len( args[0] ) == 4 and args[1].isdigit() and len( args[1] ) == 2:
@@ -49,9 +53,17 @@ def image_cache_key( file_path, adjustments ):
   return md5( file_path + str( adjustments ) ).hexdigest()
 
 def download_image( args ):
-  remote_image    = urllib.urlopen( args['download_url'] ).read()
-  the_hash        = md5( remote_url ).hexdigest()  
-  f = open( self.img_path ,'wb')
+  download_path = os.path.join( mount, 'downloads')
+  remote_url = args['download_url']
+  the_hash   = md5( remote_url ).hexdigest()
+  img_path   = os.path.join( download_path, the_hash )
+  if os.path.exists( img_path ):
+    return img_path
+  print 'downloading!'
+  if not os.path.exists( download_path ):
+    os.makedirs( download_path )
+  remote_image    = urllib.urlopen( remote_url ).read()
+  f = open( img_path,'wb')
   f.write( remote_image )
   f.close()
 
