@@ -3,12 +3,9 @@ from flask import current_app as app
 from app.image.download import Download
 import os
 from  hashlib import md5
-import urllib
 from PIL import Image
 
 mod_remote = Blueprint('Remote', __name__, url_prefix='/r')
-mount = '/home/alix/Dropbox/Development/PyPolex/mount/'
-
 
 @mod_remote.route('/<path:varargs>')
 def index( varargs = None ):

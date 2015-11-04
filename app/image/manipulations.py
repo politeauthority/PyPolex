@@ -9,7 +9,7 @@ from PIL import Image
 
 class Manipulations(object):
 
-def crop( image, args ):
+def crop( self, image, args ):
   size = image.size
   if size[0] > size[1]:
     larger_dimension = 'width'
