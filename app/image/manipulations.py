@@ -12,6 +12,8 @@ class Manipulations(object):
 
   def go( self, file_path, args ):
     cache = Cache(args)
+    print ' '
+    print args
     if 'image_adj' not in args:
       cache.save()
       return cache.file

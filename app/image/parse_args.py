@@ -26,10 +26,13 @@ class ParseArgs(object):
       image_adj['maxwidth'] = maxwidth    
     if version:
       command['version'] = version
-    if len( args ) > 0:
-      for arg in args.split('/'):
+    split_args = args.split('/')
+    if len( split_args ) > 0:
+      for arg in split_args:
         if arg == 'crop':
-          crop_arg =args[c+1]
+          crop_arg = split_args[c+1]
+          print args
+          print crop_arg
           image_adj['crop'] = []
           if ',' in crop_arg:
             tmp = crop_arg.split(',')

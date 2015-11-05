@@ -58,3 +58,7 @@ app.register_blueprint( home_module )
 from app.controllers.remote import mod_remote as remote_module
 app.register_blueprint( remote_module )
 
+from app.controllers.property import mod_property as property_module
+app.register_blueprint( property_module )
+
+# End File: app/__init__.py
