@@ -32,7 +32,7 @@ class Manipulations(object):
     if ext:
       image.save( cache.file, ext)
     else:
-      image.save( cache.file, 'JPG')
+      image.save( cache.file, 'JPEG')
       app.logger.warning('Saved file %s with possible incorrect extension' % cache.file )
     return cache.file
 
