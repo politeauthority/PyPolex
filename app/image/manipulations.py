@@ -32,7 +32,8 @@ class Manipulations(object):
     if ext:
       image.save( cache.file, ext)
     else:
-      app.logger.warning('Cannot save file %s incorrect extension' % cache.file )
+      image.save( cache.file, 'JPG')
+      app.logger.warning('Saved file %s with possible incorrect extension' % cache.file )
     return cache.file
 
   def crop( self, image, args ):
