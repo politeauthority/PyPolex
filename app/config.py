@@ -9,7 +9,7 @@ PRODUCTION = False
 
 # Define the application directory
 BASE_DIR           = os.path.abspath(os.path.dirname(__file__))  
-MOUNT_DIR          = '/data/mount/'
+MOUNT_DIR          = '/data/pypolex/'
 CACHE_DIR          = os.path.join( MOUNT_DIR, 'cache' )
 ALLOWED_EXTENSIONS = set( ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'] )
 LOG_DIR            = BASE_DIR + '/logs/'

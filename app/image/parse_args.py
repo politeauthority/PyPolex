@@ -44,7 +44,7 @@ class ParseArgs(object):
         if arg == 'maxwidth':
           image_adj['maxwidth'] = int(args[c+1])
         c += 1
-        if arg[0] == 'v' and arg[1:].isdigit():
+        if len(arg) >= 1 and arg[0] == 'v' and arg[1:].isdigit():
           command['version'] = arg[1:]
     if len( image_adj ) > 0:
       command['image_adj'] = image_adj

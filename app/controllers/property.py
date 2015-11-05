@@ -19,7 +19,8 @@ def index( varargs = None ):
   if prop_img:
     args['file_path'] = prop_img
     return draw_image( prop_img, args, check_cache=False )
-  return 'you suck'
+
+  return handle_404( args )
 
 def check_cache( args ):
   cache = Cache( args )
@@ -37,6 +38,15 @@ def draw_image( image_path, args, check_cache = True ):
   if not cache_file:
     cache_file = Manipulations().go( image_path, args )
   return send_file( str(cache_file), mimetype='image/jpg')
+
+def handle_404( args ):
+  fallback_image = os.path.join(
+    app.config['MOUNT_DIR'],
+    'property',
+    'fallback',
+    'houli.jpg'
+  )
+  return draw_image( fallback_image, args, check_cache=False )
 
 def check_prop_image( url_args ):
   prop_dir = os.path.join( app.config['MOUNT_DIR'], 'property' )
@@ -57,6 +67,7 @@ def check_prop_image( url_args ):
     property_id, 
     '%s_%s.jpg' % ( property_id, order_id ) 
   )
+  print image_path
   if not os.path.exists( image_path ):
     return False
 
