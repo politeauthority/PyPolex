@@ -18,10 +18,10 @@ def index( varargs = None ):
   if 'download_url' in args:
     downloaded_file = Download( args ).go( 'remote' )
     args['file_path'] = downloaded_file
-    return Draw( args ).go( cache_result )
+    return Draw( args ).go( downloaded_file )
   return handle_404(), 404
 
-def parse_remote_url_args( url, image_args ):
+def remote_url_args( url, image_args ):
   if url[:4] == 'http':
     image_args['download_url'] = url
   return image_args

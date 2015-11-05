@@ -1,7 +1,6 @@
 """
     Draw
 """
-
 from flask import Blueprint, send_file, Response
 from flask import current_app as app
 from app.image.cache import Cache
@@ -21,6 +20,7 @@ class Draw(object):
     return send_file( str(cache_file), mimetype='image/jpg')
 
   def find_extention( self ):
-    print self.image_path
+
+    app.logger.debug( self.image_path )
 
 # End File PyPolex/app/image/draw.py

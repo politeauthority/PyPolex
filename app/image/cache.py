@@ -25,6 +25,7 @@ class Cache(object):
 
   def serve_cache( self ):
     if os.path.exists( self.file ):
+      app.logger.info('Serving Cache')
       return self.file
     return False
 

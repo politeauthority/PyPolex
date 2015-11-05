@@ -7,12 +7,12 @@
 
 from flask import flash
 from flask import current_app as app
+from app.image.extension import Extension
 import os
-import datetime
-from PIL import Image
 from werkzeug import secure_filename
 from  hashlib import md5
 import urllib
+import shutil
 
 class Download(object):
 
@@ -21,12 +21,14 @@ class Download(object):
     self.mount_dir = app.config['MOUNT_DIR']
 
   def go( self, path = None  ):
-    if path:
-      download_path = os.path.join( self.mount_dir, path )
-    else:
-      download_path = os.path.join( self.mount_dir, 'downloads')
+    download_path = os.path.join( self.mount_dir, 'downloads')
     if not os.path.exists( download_path ):
       os.makedirs( download_path )
+    if path:
+      store_path = os.path.join( self.mount_dir, path )
+    else:
+      store_path = download_path
+
     remote_url = self.args['download_url']
     the_hash   = md5( remote_url ).hexdigest()
     img_path   = os.path.join( download_path, the_hash )
@@ -35,7 +37,13 @@ class Download(object):
     remote_image    = urllib.urlopen( remote_url ).read()
     f = open( img_path,'wb')
     f.write( remote_image )
+    app.logger.info('Downloading: %s' % remote_url )
     f.close()
+    ext = Extension().find( img_path )
+    app.logger.debug( ext )
+    if ext:
+      new_phile = os.path.join( store_path, '%s.%s' % ( the_hash, ext ) )
+      shutil.copyfile( img_path, new_phile )
     return img_path
 
   def check_url( self, url = None ):
