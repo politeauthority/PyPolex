@@ -14,7 +14,9 @@ class Draw(object):
 
   def go( self, image_path ):
     self.image_path = image_path
-    ext = Extension().find( self.image_path )    
+    ext = Extension().find( self.image_path )
+    if not ext:
+      ext = 'jpg'
     response = Response()
     response.headers["Content-Type"] = "max-age=%d" % ( 60*60*12 )
     cache_file = Manipulations().go( self.image_path, self.args )
