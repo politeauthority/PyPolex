@@ -25,7 +25,7 @@ class Cache(object):
 
   def serve_cache( self ):
     if os.path.exists( self.file ):
-      return file_path
+      return self.file
     return False
 
   def save( self ):

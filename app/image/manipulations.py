@@ -2,7 +2,7 @@
     Manipulations
 """
 
-from flask import Flask
+from flask import Flask, request
 from flask import current_app as app
 from app.image.cache import Cache
 import os
@@ -16,6 +16,8 @@ class Manipulations(object):
       cache.save()
       return cache.file
     try:
+      print ' '
+      print file_path
       image = Image.open( file_path )
     except IOError, e:
       app.logger.warning( 'Image not found on disk: %s' % request.url )

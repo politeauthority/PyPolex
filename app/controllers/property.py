@@ -13,7 +13,7 @@ def index( varargs = None ):
   args = ParseArgs().go( varargs )
   cache_result = check_cache( args )
   if cache_result:
-    return draw_image( str( cache_result ), check_cache=False )
+    return draw_image( str( cache_result ), args, check_cache=False )
 
   prop_img = check_prop_image( varargs )
   if prop_img:
@@ -46,7 +46,8 @@ def handle_404( args ):
     'fallback',
     'houli.jpg'
   )
-  return draw_image( fallback_image, args, check_cache=False )
+  args['file_path'] = fallback_image
+  return draw_image( fallback_image, args, check_cache=False ), 404
 
 def check_prop_image( url_args ):
   prop_dir = os.path.join( app.config['MOUNT_DIR'], 'property' )
