@@ -15,7 +15,6 @@ class Extension(object):
     if 'image/' in raw_type and ';' in raw_type:
       ext = raw_type[ raw_type.find('image/') + 6 : ]
       ext = ext[ : ext.find(';') ]
-      app.logger.debug( ext )
       if ext in app.config['ALLOWED_EXTENSIONS']:
         return ext
       else:

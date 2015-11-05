@@ -26,6 +26,8 @@ class Download(object):
       os.makedirs( download_path )
     if path:
       store_path = os.path.join( self.mount_dir, path )
+      if not os.path.exists( store_path ):
+        os.makedirs( store_path )
     else:
       store_path = download_path
 

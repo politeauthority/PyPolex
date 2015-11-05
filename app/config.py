@@ -11,6 +11,7 @@ PRODUCTION = False
 BASE_DIR           = os.path.abspath(os.path.dirname(__file__))  
 MOUNT_DIR          = '/data/pypolex/'
 CACHE_DIR          = os.path.join( MOUNT_DIR, 'cache' )
+FALLBACK_DIR       = os.path.join( BASE_DIR, '..', 'fallback' )
 ALLOWED_EXTENSIONS = set( ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'] )
 LOG_DIR            = BASE_DIR + '/logs/'
 WEB_IP             = '0.0.0.0'

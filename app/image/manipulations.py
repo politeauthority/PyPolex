@@ -5,6 +5,7 @@
 from flask import Flask, request
 from flask import current_app as app
 from app.image.cache import Cache
+from app.image.extension import Extension
 import os
 from PIL import Image
 
@@ -25,7 +26,13 @@ class Manipulations(object):
     elif 'maxwidth' in args['image_adj']:
       size = image.size
       image.thumbnail( ( args['image_adj']['maxwidth'], size[1] ) , Image.ANTIALIAS )
-    image.save( cache.file, "JPEG")
+    if 'mirror' in args['image_adj'] and args['image_adj']['mirror'] ==  True:
+      image = image.transpose( Image.FLIP_LEFT_RIGHT )
+    ext = Extension().find( file_path )
+    if ext:
+      image.save( cache.file, ext)
+    else:
+      app.logger.warning('Cannot save file %s incorrect extension' % cache.file )
     return cache.file
 
   def crop( self, image, args ):
