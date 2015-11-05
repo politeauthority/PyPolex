@@ -14,7 +14,11 @@ class Extension(object):
   def find( self, file_path ):
     app.logger.debug(file_path)
     if os.path.exists( file_path ):
-      raw_type = subprocess.check_output(['file', '-ib', file_path ] ).strip()
+      try:
+        raw_type = subprocess.check_output(['file', '-ib', file_path ] ).strip()
+      except Exception, e:
+        app.logger.warning('Couldnt find file %s' % file_path )
+        return False
       if 'image/' in raw_type and ';' in raw_type:
         ext = raw_type[ raw_type.find('image/') + 6 : ]
         ext = ext[ : ext.find(';') ]
