@@ -1,8 +1,5 @@
 """
     Download
-
-    @ ToDo:
-      make `mount` a configuration driven element
 """
 
 from flask import flash

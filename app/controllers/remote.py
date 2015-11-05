@@ -1,3 +1,11 @@
+"""
+    Remote Controller
+
+    @desc: Grabs images from a remote server and stores and serves them
+      with full image manipulation features
+    @media: creates and uses MOUNT/remote and mount/downloads
+
+"""
 from flask import Blueprint, send_file, Response, request
 from flask import current_app as app
 from app.image.download import Download
@@ -25,7 +33,6 @@ def index( varargs = None ):
 
 def remote_url_args( url, image_args ):
   remote_url = request.args.get('u')
-  app.logger.debug(remote_url)
   if url and url[:4] == 'http':
     image_args['download_url'] = url
   elif remote_url:

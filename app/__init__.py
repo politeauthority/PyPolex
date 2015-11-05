@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config.from_object('app.config')
 
 # Set Up Logging
-app_log_file = os.path.join( 'app.log' )
+app_log_file = os.path.join( app.config['LOG_DIR'], 'app.log' )
 logging.basicConfig( filename = app_log_file, level=logging.DEBUG )
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler = TimedRotatingFileHandler( 
