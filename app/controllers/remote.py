@@ -4,20 +4,27 @@ from app.image.download import Download
 from app.image.cache import Cache
 from app.image.manipulations import Manipulations
 from app.image.parse_args import ParseArgs
+from app.image.draw import Draw
 
 mod_remote = Blueprint('Remote', __name__, url_prefix='/r')
 
 @mod_remote.route('/<path:varargs>')
 def index( varargs = None ):
   args = ParseArgs().go( varargs )
+  args = remote_url_args( varargs, args )
   cache_result = check_cache( args )
   if cache_result:
-    return draw_image( str( cache_result ), check_cache=False )
+    return Draw(args).go( cache_result )
   if 'download_url' in args:
     downloaded_file = Download( args ).go( 'remote' )
     args['file_path'] = downloaded_file
-    return draw_image( downloaded_file, args, check_cache=False )
+    return Draw( args ).go( cache_result )
   return handle_404(), 404
+
+def parse_remote_url_args( url, image_args ):
+  if url[:4] == 'http':
+    image_args['download_url'] = url
+  return image_args
 
 def check_cache( args ):
   cache = Cache( args )
@@ -25,14 +32,6 @@ def check_cache( args ):
   if cache_result:
     return cache_result
   return False
-
-def draw_image( image_path, args, check_cache = True ):
-  response = Response()
-  response.headers["Content-Type"] = "max-age=%d" % ( 60*60*12 )
-  if check_cache:
-    print 'check for a fucking cache'
-  cache_file = Manipulations().go( image_path, args )
-  return send_file( str(cache_file), mimetype='image/jpg')
 
 def handle_404( args ):
   fallback_image = os.path.join(
@@ -42,6 +41,6 @@ def handle_404( args ):
     'houli.jpg'
   )
   args['file_path'] = fallback_image
-  return draw_image( fallback_image, args, check_cache=False ), 404
+  return Draw( args ).go( fallback_image ), 404
 
 # End File: app/controllers/remote.py

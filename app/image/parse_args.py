@@ -11,9 +11,6 @@ class ParseArgs(object):
 
   def go( self, args ):
     command = {}
-    if args[:4] == 'http':
-      command['download_url'] = args
-      args = args.replace( command['download_url'], '' )
     image_adj = {}
     c = 0
     crop     = request.args.get('crop')

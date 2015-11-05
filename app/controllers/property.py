@@ -1,3 +1,17 @@
+"""
+    Property Controller
+
+    URLS:
+      /property/{mls_id}/{property_id}/{order_id}(.jpg|.png|.gif)
+      /property/107/123456/0
+
+    File Storage:
+      mount/107/123/123456/123456_0.jpg
+
+    Currenty only supports jpg
+
+"""
+
 from flask import Blueprint, send_file, Response
 from flask import current_app as app
 from app.image.download import Download
@@ -68,7 +82,6 @@ def check_prop_image( url_args ):
     property_id, 
     '%s_%s.jpg' % ( property_id, order_id ) 
   )
-  print image_path
   if not os.path.exists( image_path ):
     return False
 

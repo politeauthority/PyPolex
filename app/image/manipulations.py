@@ -16,8 +16,6 @@ class Manipulations(object):
       cache.save()
       return cache.file
     try:
-      print ' '
-      print file_path
       image = Image.open( file_path )
     except IOError, e:
       app.logger.warning( 'Image not found on disk: %s' % request.url )

@@ -29,9 +29,7 @@ class Cache(object):
     return False
 
   def save( self ):
-    print ' '
-    print ' '
     shutil.copyfile( self.args['file_path'], self.file )
-    print self.args
+    app.logger.info('Saved cache file for: %s' % self.args['file_path'] )
 
 # End File PyPolex/app/image/cache.py
