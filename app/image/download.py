@@ -27,14 +27,11 @@ class Download(object):
       download_path = os.path.join( self.mount_dir, 'downloads')
     if not os.path.exists( download_path ):
       os.makedirs( download_path )
-
     remote_url = self.args['download_url']
     the_hash   = md5( remote_url ).hexdigest()
     img_path   = os.path.join( download_path, the_hash )
-
     if os.path.exists( img_path ):
       return img_path
-    print 'downloading!'
     remote_image    = urllib.urlopen( remote_url ).read()
     f = open( img_path,'wb')
     f.write( remote_image )

@@ -31,9 +31,11 @@ def check_cache( args ):
 def draw_image( image_path, args, check_cache = True ):
   response = Response()
   response.headers["Content-Type"] = "max-age=%d" % ( 60*60*12 )
+  cache_file = None
   if check_cache:
-    print 'check for a fucking cache'
-  cache_file = Manipulations().go( image_path, args )
+    cache_file = check_cache( args )
+  if not cache_file:
+    cache_file = Manipulations().go( image_path, args )
   return send_file( str(cache_file), mimetype='image/jpg')
 
 def check_prop_image( url_args ):
@@ -55,7 +57,6 @@ def check_prop_image( url_args ):
     property_id, 
     '%s_%s.jpg' % ( property_id, order_id ) 
   )
-  print image_path
   if not os.path.exists( image_path ):
     return False
 
