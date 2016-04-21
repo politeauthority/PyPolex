@@ -1,21 +1,20 @@
 import os
-
-APP_URL = 'http://192.168.7.78'
-
+from enterprise_data.utilities import environmental
 # Statements for enabling the development environment
 DEBUG = True
 DEBUG_TB_INTERCEPT_REDIRECTS = True
 PRODUCTION = False
 
 # Define the application directory
-BASE_DIR           = os.path.abspath(os.path.dirname(__file__))  
-MOUNT_DIR          = '/data/pypolex/'
-CACHE_DIR          = os.path.join( MOUNT_DIR, 'cache' )
-FALLBACK_DIR       = os.path.join( BASE_DIR, '..', 'fallback' )
-ALLOWED_EXTENSIONS = set( ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'] )
-LOG_DIR            = os.path.join( MOUNT_DIR, 'logs' )
-WEB_IP             = '0.0.0.0'
-WEB_PORT           = 8081
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+MOUNT_DIR = environmental.get_photo_dir()
+CACHE_DIR = os.path.join(MOUNT_DIR, 'cache')
+CACHE_ENABLED = os.environ.get('BOOJ_IMG_CACHE_ENABLED', True)
+FALLBACK_DIR = os.path.join(BASE_DIR, '..', 'fallback')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+LOG_DIR = environmental.get_base_logging_dir()
+WEB_IP = '0.0.0.0'
+WEB_PORT = 8081
 
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle

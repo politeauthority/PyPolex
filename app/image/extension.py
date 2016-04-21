@@ -12,7 +12,6 @@ import subprocess
 class Extension(object):
 
   def find( self, file_path ):
-    app.logger.debug(file_path)
     if os.path.exists( file_path ):
       try:
         raw_type = subprocess.check_output(['file', '-ib', file_path ] ).strip()

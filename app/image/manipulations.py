@@ -19,8 +19,8 @@ class Manipulations(object):
     try:
       image = Image.open( file_path )
     except IOError, e:
-      app.logger.warning( 'Image not found on disk: %s' % request.url )
-      image = Image.open( os.path.join( app.config['BASE_DIR'], 'app/static/media/placeholder.jpg' ) )
+      app.logger.warning('Image not found on disk: %s' % request.url)
+      image = Image.open(os.path.join(app.config['MOUNT_DIR'], 'fallback/booj-logo.jpg'))
     if 'crop' in args['image_adj']:
       image = self.crop( image, args['image_adj']['crop'] )
     elif 'maxwidth' in args['image_adj']:

@@ -22,70 +22,79 @@ import os
 
 mod_property = Blueprint('Property', __name__, url_prefix='/property')
 
+
 @mod_property.route('/<path:varargs>')
-def index( varargs = None ):
-  args = ParseArgs().go( varargs )
-  cache_result = check_cache( args )
-  if cache_result:
-    return draw_image( str( cache_result ), args, check_cache=False )
+def index(varargs=None):
+    args = ParseArgs().go(varargs)
+    cache_result = check_cache(args, 'property')
+    print cache_result
+    if cache_result:
+        return draw_image(str(cache_result), args)
 
-  prop_img = check_prop_image( varargs )
-  if prop_img:
-    args['file_path'] = prop_img
-    return draw_image( prop_img, args, check_cache=False )
+    prop_img = check_prop_image(varargs)
+    if prop_img:
+        args['file_path'] = prop_img
+        app.logger.debug(args['file_path'])
+        return draw_image(prop_img, args)
+    return handle_404(args)
 
-  return handle_404( args )
 
-def check_cache( args ):
-  cache = Cache( args )
-  cache_result = cache.serve_cache()
-  if cache_result:
-    return cache_result
-  return False
-
-def draw_image( image_path, args, check_cache = True ):
-  response = Response()
-  response.headers["Content-Type"] = "max-age=%d" % ( 60*60*12 )
-  cache_file = None
-  if check_cache:
-    cache_file = check_cache( args )
-  if not cache_file:
-    cache_file = Manipulations().go( image_path, args )
-  return send_file( str(cache_file), mimetype='image/jpg')
-
-def handle_404( args ):
-  fallback_image = os.path.join(
-    app.config['MOUNT_DIR'],
-    'property',
-    'fallback',
-    'houli.jpg'
-  )
-  args['file_path'] = fallback_image
-  return draw_image( fallback_image, args, check_cache=False ), 404
-
-def check_prop_image( url_args ):
-  prop_dir = os.path.join( app.config['MOUNT_DIR'], 'property' )
-  url_args = url_args.split('/')
-  if not url_args[0].isdigit() or \
-    not url_args[1].isdigit() or \
-    not url_args[2].isdigit():
+def check_cache(args, entity):
+    cache = Cache(args, entity)
+    cache_result = cache.serve_cache()
+    if cache_result:
+        return cache_result
     return False
 
-  mls_id = url_args[0]
-  property_id = url_args[1]
-  order_id = url_args[2]
 
-  image_path = os.path.join( 
-    prop_dir, 
-    mls_id, 
-    property_id[:3],
-    property_id, 
-    '%s_%s.jpg' % ( property_id, order_id ) 
-  )
-  if not os.path.exists( image_path ):
-    return False
+def draw_image(image_path, args):
+    response = Response()
+    response.headers["Content-Type"] = "max-age=%d" % (60*60*12)
+    file_string = Manipulations().go(image_path, args)
+    if app.config['CACHE_ENABLED']:
+        Cache(args, 'property').save(file_string)
+    return send_file(str(cache_file), mimetype='image/jpg')
 
-  return image_path
+
+def handle_404(args):
+    fallback_image = os.path.join(
+        app.config['MOUNT_DIR'],
+        'property',
+        'fallback',
+        'booj-logo.png'
+    )
+    args['file_path'] = fallback_image
+    return draw_image(fallback_image, args), 404
+
+
+def check_prop_image(url_args):
+    prop_dir = os.path.join(app.config['MOUNT_DIR'], 'property')
+    url_args = url_args.split('/')
+    if len(url_args) < 3:
+        return False
+    if not url_args[0].isdigit() or \
+        not url_args[1].isdigit() or \
+            not url_args[2].isdigit():
+        return False
+    print url_args
+    mls_trans = {'107': 'hgar', '164': 'scw'}
+    mls_id = url_args[0]
+    pia = {}
+    pia['mls_path'] = mls_trans[mls_id]
+    pia['property_id'] = url_args[1]
+    pia['order_id'] = url_args[2]
+
+    pia['image_path'] = os.path.join(
+        prop_dir,
+        pia['mls_path'],
+        pia['property_id'][:3],
+        pia['property_id'][3:6],
+        pia['property_id'],
+        '%s_%s.jpg' % (pia['property_id'], pia['order_id'])
+    )
+    if not os.path.exists(pia['image_path']):
+        return False
+    return pia['image_path']
 
 
 # End File: app/controllers/property.py
