@@ -12,8 +12,8 @@ class Cache(object):
 
     def __init__(self, args, entity=''):
         self.args = args
-        self.cache_dir = os.join.path(app.config['CACHE_DIR'], self.entity)
         self.entity = entity
+        self.cache_dir = os.path.join(app.config['CACHE_DIR'], self.entity)
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
             print 'making dirs'
@@ -35,11 +35,10 @@ class Cache(object):
         return False
 
     def save(self, image):
-        fh = open(self.file, "w")
-        fh.write(image.decode('base64'))
-        fh.close()
+        image.save(self.file, 'jpeg')
         # shutil.copyfile(self.args['file_path'], self.file)
         app.logger.debug(self.file)
         app.logger.info('Saved cache file for: %s' % self.args['file_path'])
+        return self.file
 
 # End File PyPolex/app/image/cache.py

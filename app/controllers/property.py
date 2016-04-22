@@ -22,11 +22,20 @@ import os
 
 mod_property = Blueprint('Property', __name__, url_prefix='/property')
 
+mls_images = {
+    '107': {
+        'mls_path': 'hgar',
+        'default_args': {
+            'maxwidth': '5000'
+        }
+    }
+}
+
 
 @mod_property.route('/<path:varargs>')
 def index(varargs=None):
     args = ParseArgs().go(varargs)
-    cache_result = check_cache(args, 'property')
+    cache_result = check_cache(args)
     print cache_result
     if cache_result:
         return draw_image(str(cache_result), args)
@@ -39,8 +48,8 @@ def index(varargs=None):
     return handle_404(args)
 
 
-def check_cache(args, entity):
-    cache = Cache(args, entity)
+def check_cache(args):
+    cache = Cache(args, 'property')
     cache_result = cache.serve_cache()
     if cache_result:
         return cache_result
@@ -50,9 +59,9 @@ def check_cache(args, entity):
 def draw_image(image_path, args):
     response = Response()
     response.headers["Content-Type"] = "max-age=%d" % (60*60*12)
-    file_string = Manipulations().go(image_path, args)
-    if app.config['CACHE_ENABLED']:
-        Cache(args, 'property').save(file_string)
+    img_str = Manipulations().go(image_path, args)
+    app.logger.debug(args)
+    cache_file = Cache(args, 'property').save(img_str)
     return send_file(str(cache_file), mimetype='image/jpg')
 
 
