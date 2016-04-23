@@ -29,7 +29,7 @@ class Manipulations(object):
             print ' '
             print args['image_adj']['maxwidth']
             image.thumbnail((args['image_adj']['maxwidth'], size[1]), Image.ANTIALIAS)
-        if 'mirror' in args['image_adj'] and args['image_adj']['mirror'] ==  True:
+        if 'mirror' in args['image_adj'] and args['image_adj']['mirror'] == True:
             image = image.transpose(Image.FLIP_LEFT_RIGHT)
         return image
 

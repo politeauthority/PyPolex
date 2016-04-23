@@ -29,9 +29,8 @@ class ParseArgs(object):
             image_adj['maxwidth'] = maxwidth
         if version:
             command['version'] = version
-        if not mirror:
+        if mirror:
             image_adj['mirror'] = True
-        print args.split('/')
         if args:
             split_args = args.split('/')
             if len(split_args) > 0:
@@ -49,10 +48,7 @@ class ParseArgs(object):
                             image_adj['crop'].append(int(crop_arg))
                             image_adj['crop'].append(int(crop_arg))
                     if arg == 'maxwidth':
-                        print 'xxxx'
-                        print c
-                        print args[c+1]
-                        image_adj['maxwidth'] = int(split_args[c+1])
+                        image_adj['maxwidth'] = int(split_args[c + 1])
                     if arg == 'mirror':
                         image_adj['mirror'] = True
                     if not no_cache and arg in ['no-cache', 'no_cache']:
