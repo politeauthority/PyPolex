@@ -8,6 +8,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from app.controllers.home import mod_home as home_module
 from app.controllers.remote import mod_remote as remote_module
 from app.controllers.property import mod_property as property_module
+from app.controllers.realtor import mod_realtor as realtor_module
+from app.controllers.expirements import mod_expirements as expirements_module
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -57,5 +59,7 @@ def not_found(error):
 app.register_blueprint(home_module)
 app.register_blueprint(remote_module)
 app.register_blueprint(property_module)
+app.register_blueprint(realtor_module)
+app.register_blueprint(expirements_module)
 
 # End File: app/__init__.py

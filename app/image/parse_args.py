@@ -13,12 +13,15 @@ class ParseArgs(object):
     def go(self, args):
         command = {}
         image_adj = {}
-        c = 0
+        command['url'] = args
         crop = request.args.get('crop')
         maxwidth = request.args.get('maxwidth')
         version = request.args.get('v')
         mirror = request.args.get('mirror')
         no_cache = request.args.get('no_cache', False)
+        size = request.args.get('size', False)
+        quality = request.args.get('quality', False)
+        web_debug = request.args.get('debug', False)
         if crop:
             if ',' in crop:
                 crop_dim = crop.split(',')
@@ -31,12 +34,20 @@ class ParseArgs(object):
             command['version'] = version
         if mirror:
             image_adj['mirror'] = True
+        if size:
+            command['size'] = size
+        if web_debug:
+            command['web_debug'] = True
         if args:
             split_args = args.split('/')
             if len(split_args) > 0:
+                c = 0
                 for arg in split_args:
+                    if not size and \
+                            arg in ['large', 'medium', 'med', 'small', 'thumb', 'thumbnail']:
+                        command['size'] = arg
                     if arg == 'crop':
-                        crop_arg = split_args[c+1]
+                        crop_arg = split_args[c + 1]
                         print args
                         print crop_arg
                         image_adj['crop'] = []
@@ -56,9 +67,13 @@ class ParseArgs(object):
                     c += 1
                     if len(arg) >= 1 and arg[0] == 'v' and arg[1:].isdigit():
                         command['version'] = arg[1:]
+                    if arg == 'debug':
+                        command['web_debug'] = True
+        app.logger.debug( image_adj['maxwidth'] )
         if len(image_adj) > 0:
             command['image_adj'] = image_adj
         command['no_cache'] = no_cache
+        command['cache_hash'] = None
         return command
 
 # End File PyPolex/app/image/parse_args.py
