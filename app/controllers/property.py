@@ -12,7 +12,7 @@
 
     @todos
         - cropping isnt working correctly
-        - 
+        -
 
 """
 
@@ -62,8 +62,8 @@ mls_images = {
 }
 
 company_hosts = {
-    'localhost:8071': 'HOULIHAN',
-    'media.stark.com': 'STARK',
+    'localhost:8071': '36',
+    'media.stark.com': '43',
 }
 
 company_images = {
@@ -91,7 +91,7 @@ def index(ir=None):
         return handle_error(ir)
 
     if os.path.exists(ir['override_photo_path']):
-        app.logger.info('Loading Override Photo')
+        app.logger.info('Loading Company Override Photo')
         ir['draw_file'] = ir['override_photo_path']
     elif os.path.exists(ir['mls_photo_path']):
         app.logger.info('Loading MLS Photo')
@@ -182,7 +182,6 @@ def parse_request(args):
         cache_string += 'entity:%s ' % vargs['entity']
     if 'version' in vargs:
         cache_string += 'version:%s ' % vargs['version'] + ''
-
     if 'image_adj' in vargs:
         cache_string += 'image_adj: %s ' % str(vargs['image_adj'])
     if 'size' in vargs:

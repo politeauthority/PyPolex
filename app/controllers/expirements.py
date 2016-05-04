@@ -18,7 +18,7 @@ mod_expirements = Blueprint('Expirements', __name__, url_prefix='/e')
 photo_path = os.path.join(
     os.environ.get('BOOJ_PHOTO_DIR'),
     'hosted',
-    'properties')
+    'expirements')
 
 
 @mod_expirements.route('/<path:ir>')
@@ -33,12 +33,9 @@ def index(ir=None):
     if not ir or ('error' in ir and ir['error']):
         return handle_error(ir)
 
-    if os.path.exists(ir['override_photo_path']):
-        app.logger.info('Loading Override Photo')
-        ir['draw_file'] = ir['override_photo_path']
-    elif os.path.exists(ir['mls_photo_path']):
-        app.logger.info('Loading MLS Photo')
-        ir['draw_file'] = ir['mls_photo_path']
+    if os.path.exists(ir['expirement_file']):
+        app.logger.info('Loading Photo')
+        ir['draw_file'] = ir['expirement_file']
     else:
         app.logger.warning('Cannot Find file')
         ir['error'] = 'Unknown_File'
@@ -49,6 +46,14 @@ def index(ir=None):
         ir['draw_file'] = maniup_file
     return Draw(ir).image()
 
+
+def parse_request(args):
+    vargs = ParseArgs().go(args)
+    vargs['entity'] = 'expirements'
+    vargs['expirement_file'] = os.path.join(photo_path, args.split('/')[0])
+    vargs['mimetype'] = 'webm'
+
+    return vargs
 
 
 def handle_error(ir):

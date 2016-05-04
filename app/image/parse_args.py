@@ -69,7 +69,12 @@ class ParseArgs(object):
                         command['version'] = arg[1:]
                     if arg == 'debug':
                         command['web_debug'] = True
-        app.logger.debug( image_adj['maxwidth'] )
+                    if arg[-5:] == '.webm':
+                        command['extension'] = 'webm'
+                    if arg[-4:] == '.gif':
+                        command['extension'] = 'gif'
+                    if arg[-4:] == '.jpg' or arg[-5:] == '.jpeg':
+                        command['extension'] = 'jpeg'
         if len(image_adj) > 0:
             command['image_adj'] = image_adj
         command['no_cache'] = no_cache

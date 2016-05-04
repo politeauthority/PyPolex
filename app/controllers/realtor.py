@@ -45,7 +45,7 @@ def index(ir=None):
     app.logger.debug(ir['realtor_file_id'])
     if os.path.exists(ir['realtor_file_id']):
         app.logger.info('Loading Realtor Photo')
-        image_phile = ir['override_photo_path']
+        image_phile = ir['realtor_file_id']
     else:
         app.logger.warning('Cannot Find Realtor File')
         ir['error'] = 'Unknown_File'
